@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Age Calculator | CodeAlpha</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .container {
+      background: #fff;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.1);
+      text-align: center;
+      width: 350px;
+    }
+    h1 {
+      color: #333;
+      margin-bottom: 20px;
+    }
+    input {
+      padding: 10px;
+      margin: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      width: 80px;
+      text-align: center;
+      font-size: 16px;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      border: none;
+      background: #0077ff;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #005ed1;
+    }
+    .result {
+      margin-top: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      color: #444;
+    }
+    .error {
+      color: red;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Age Calculator</h1>
+    <div>
+      <input type="number" id="day" placeholder="DD" min="1" max="31">
+      <input type="number" id="month" placeholder="MM" min="1" max="12">
+      <input type="number" id="year" placeholder="YYYY" min="1900" max="2100">
+    </div>
+    <button onclick="calculateAge()">Calculate Age</button>
+    <div id="error" class="error"></div>
+    <div id="result" class="result"></div>
+  </div>
+
+  <script>
+    function calculateAge() {
+      let day = parseInt(document.getElementById("day").value);
+      let month = parseInt(document.getElementById("month").value);
+      let year = parseInt(document.getElementById("year").value);
+
+      let errorMsg = document.getElementById("error");
+      let result = document.getElementById("result");
+      errorMsg.innerHTML = "";
+      result.innerHTML = "";
+
+      if (!day || !month || !year) {
+        errorMsg.innerHTML = "⚠️ Please enter complete Date of Birth.";
+        return;
+      }
+
+      let birthDate = new Date(year, month - 1, day);
+      let today = new Date();
+
+      if (birthDate > today) {
+        errorMsg.innerHTML = "⚠️ Birth date cannot be in the future.";
+        return;
+      }
+
+      let years = today.getFullYear() - birthDate.getFullYear();
+      let months = today.getMonth() - birthDate.getMonth();
+      let days = today.getDate() - birthDate.getDate();
+
+      // Adjust for negative days
+      if (days < 0) {
+        months--;
+        let prevMonth = new Date(today.getFullYear(), today.getMonth(), 0);
+        days += prevMonth.getDate();
+      }
+
+      // Adjust for negative months
+      if (months < 0) {
+        years--;
+        months += 12;
+      }
+
+      result.innerHTML = `🎉 You are <br> <b>${years}</b> years, <b>${months}</b> months, and <b>${days}</b> days old.`;
+    }
+  </script>
+</body>
+</html>
